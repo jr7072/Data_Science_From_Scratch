@@ -1,5 +1,10 @@
-from typing import List
+from typing import List, Tuple, Callable
 import math
+
+
+'''
+    VECTOR SECTION
+'''
 
 
 # define vector type
@@ -188,3 +193,121 @@ def distance(v: Vector, w: Vector) -> float:
 
 
 assert distance([1, 2], [3, 4]) == math.sqrt(8)
+
+
+'''
+    MATRIX SECTION
+'''
+
+
+# defining Matrix type
+Matrix = List[List[float]] 
+
+
+# shape of the matrix
+def shape(A: Matrix) -> Tuple[int]:
+    '''
+        calculates the shape of a matrix
+
+        A (Matrix): Input Matrix
+
+        returns (Tuple[int]): tuple that represents the shape of
+        the matrix (rows, col)
+    '''
+
+    num_rows = len(A)
+    num_cols = len(A[0]) if A else 0
+    return num_rows, num_cols
+
+assert shape([[1],[2]]) == (2, 1)
+
+
+# get row of a matrix
+def get_row(A: Matrix, i: int) -> Vector:
+    '''
+        gets a row vector from a matrix given index
+
+        A (Matrix): Input matrix 
+ 
+        i (int): index of the row to get
+
+        returns (Vector): The row vector of the matrix
+        at index i
+    ''' 
+
+    row_vector = A[i]
+    return row_vector
+
+assert get_row([[1], [2]], 0) == [1]
+
+
+# get column of a matrix
+def get_column(A: Matrix, i: int) -> Vector:
+    '''
+        gets the columns vector of Matrix given an
+        index
+
+        A (Matrix): input matrix
+
+        i (int): column index of the desired column vector
+
+        returns (Vector): The columns Vector of matrix A at
+        position i
+    '''
+
+    column_vector = [A_i[i] for A_i in A]
+    return column_vector
+
+assert get_column([[1, 2], [1, 3]], 1) == [2, 3]
+
+
+# matrix generation
+def make_matrix(shape: Tuple[int],
+                    entry_fn: Callable[[int, int], float]) -> Matrix:
+    
+    '''
+        Creates a matrix given a shape and an entry funtion
+
+        shape (Tuple[int]): shape of the desired matrix (n_rows, n_cols)
+
+        entry_fn (Callable[[int, int], float]): funciton to calculate value 
+        given row index and row column.
+
+        returns (Matrix): Matrix generated 
+    '''
+
+    n_rows, n_cols = shape
+    
+    matrix = []
+
+    for row_index in range(n_rows):
+
+        matrix_row = [entry_fn(row_index, col_index) 
+                        for col_index in range(n_cols)]
+        
+        matrix.append(matrix_row)
+    
+    return matrix
+
+def test(a, b) -> int:
+    return a + b
+
+assert make_matrix((2, 1), test) == [[0], [1]]
+
+
+# identity matrix
+def identity_matrix(n: int) -> Matrix:
+    '''
+        returns identity matrix of size n * n
+
+        n (int): size that that will be used to create
+        a n * n matrix
+
+        return (Matrix): n * n identity matrix
+    '''
+
+    shape = (n, n)
+    identity_func = lambda x, y: 1 if x == y else 0
+    return make_matrix(shape, identity_func)
+
+assert identity_matrix(2) == [[1, 0],[0, 1]]
