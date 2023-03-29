@@ -112,3 +112,7 @@ def mode(xs: List[float]) -> List[float]:
 assert mode([1, 2, 3, 4, 5, 6, 7]) == [1, 2, 3, 4, 5, 6, 7]
 assert mode([1, 3, 4, 4, 4]) == [4]
 
+
+'''
+    dispersion section
+'''
